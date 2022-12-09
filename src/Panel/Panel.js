@@ -7,43 +7,63 @@ const Panel = () => {
     const [cardInfo, setCardInfo] = useState(
         {
             email: '',
-            cardnumber: '',
-            expiredate: '',
+            card_number: '',
+            expire_date: '',
             cvc: '',
             name: '',
             country: '',
         }
     )
     
+    const [validated, setValidated] = useState(false)
+
+    const onChangeHandler = (e) => {
+        setCardInfo({...cardInfo, [e.target.name]: e.target.value});
+    }
+
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        console.log(cardInfo)
+        setValidated(true);
+        setTimeout(()=>setValidated(false), 4500);
+        setTimeout(() => e.target.reset(), 2000)
       }
-    
+
+    const onlyNumberHandler = (e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+    }
+
+    const formatNumber = (every_nth_number, symbol) => (e) => {
+            let foo = e.target.value.split(symbol).join("");
+            if (foo.length > 0) {
+              foo = foo.match(new RegExp(`.{1,${every_nth_number}}`, 'g')).join(symbol);
+            }
+            e.target.value = foo;
+    }
 
   return (
     <div className='main-container'>
         <h1>Pay<span>Me</span></h1>
-        <form onSubmit={onSubmitHandler} className='form'>
+        <form onSubmit={onSubmitHandler} className={`form ${validated ? 'validated' : ''}`}>
         <section>
-            <label htmlFor='Email'>Email</label>
-            <input onChange={ (e) => {setCardInfo({...cardInfo, email: e.target.value })}} required maxlength="20" type='email'></input>
+            <label htmlFor='email'>Email</label>
+            <input onChange={onChangeHandler} name="email" required maxLength="100" type='email'></input>
         </section>
         <section>
-            <label htmlFor='Email'>Card Information</label>
-            <input onChange={ (e) => {setCardInfo({...cardInfo, cardnumber: e.target.value })}} placeholder="1234 1234 1234 1234" required maxlength="16" type='text'></input>
+            <label htmlFor='card_information'>Card Information</label>
+            <input onInput={onlyNumberHandler} onKeyUp={formatNumber(4,"-")} onChange={onChangeHandler} name="card_number" placeholder="1234 1234 1234 1234" required minLength="19" maxLength={"19"} type='text'></input>
             <div className='row-inputs'>
-                <input onChange={ (e) => {setCardInfo({...cardInfo, expiredate: e.target.value })}} required placeholder="MM/YY" maxlength="5" type='text'></input>
-                <input onChange={ (e) => {setCardInfo({...cardInfo, cvc: e.target.value })}} required placeholder="CVC" maxlength="20" type='text'></input>
+                <input onInput={onlyNumberHandler} onKeyUp={formatNumber(2,"/")} onChange={onChangeHandler} name="expire_date" required placeholder="MM/YY" minLength="5" maxLength="5" type='text'></input>
+                <input onInput={onlyNumberHandler} onChange={onChangeHandler} name="cvc" required placeholder="CVC" minLength="3" maxLength="3" type='text'></input>
             </div>
         </section>
         <section>
-            <label htmlFor="Name on card">Name on card</label>
-            <input onChange={ (e) => {setCardInfo({...cardInfo, name: e.target.value })}} type='text'></input>
+            <label htmlFor="name">Name on card</label>
+            <input onChange={onChangeHandler} required name="name" type='text'></input>
         </section>
         <section>
-            <label htmlFor="Country or region">Country or region</label>
-            <select onChange={ (e) => {setCardInfo({...cardInfo, country: e.target.value })}}>
+            <label htmlFor="country">Country or region</label>
+            <select name="country" required onChange={onChangeHandler}>
+                <option value=""></option>
                 <option value="Poland">Poland</option>
                 <option value="Germany">Germany</option>
                 <option value="Czech Republic">Czech Republic</option>
@@ -52,7 +72,6 @@ const Panel = () => {
         </section>
         <input type="submit" value="Pay"></input>
         </form>
-        
     </div>
   )
 }
