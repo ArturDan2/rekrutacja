@@ -26,6 +26,8 @@ const Panel = () => {
         setValidated(true);
         setTimeout(()=>setValidated(false), 4500);
         setTimeout(() => e.target.reset(), 2000)
+        alert(JSON.stringify(cardInfo));
+        console.log(cardInfo)
       }
 
     const onlyNumberHandler = (e) => {
