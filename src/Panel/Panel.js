@@ -52,7 +52,7 @@ const Panel = () => {
         </section>
         <section>
             <label htmlFor='card_information'>Card Information</label>
-            <input onInput={onlyNumberHandler} onKeyUp={formatNumber(4,"-")} onChange={onChangeHandler} name="card_number" placeholder="1234 1234 1234 1234" required minLength="19" maxLength={"19"} type='text'></input>
+            <input onInput={onlyNumberHandler} onKeyUp={formatNumber(4," ")} onChange={onChangeHandler} name="card_number" placeholder="1234 1234 1234 1234" required minLength="19" maxLength={"19"} type='text'></input>
             <div className='row-inputs'>
                 <input onInput={onlyNumberHandler} onKeyUp={formatNumber(2,"/")} onChange={onChangeHandler} name="expire_date" required placeholder="MM/YY" minLength="5" maxLength="5" type='text'></input>
                 <input onInput={onlyNumberHandler} onChange={onChangeHandler} name="cvc" required placeholder="CVC" minLength="3" maxLength="3" type='text'></input>
